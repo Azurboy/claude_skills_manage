@@ -9,6 +9,14 @@
 
 An intelligent Skills management system that runs as a **Claude Code Custom Skill**. It helps you sync, search, and load skills from remote repositories.
 
+### Demo
+
+> **Example**: Search for skills to help with "personal website development"
+>
+> Skills synced from [claudekit-skills](https://github.com/mrgoonie/claudekit-skills) and [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
+
+![Demo - Personal Website Development](assets/demo.png)
+
 ### Quick Start
 
 #### Step 1: Install as Claude Code Skill
@@ -238,6 +246,14 @@ A: Yes, you can use it as a standalone CLI tool. Just run commands like `node di
 ## 中文
 
 智能 Skills 管理系统，作为 **Claude Code Custom Skill** 运行，帮助你从远程仓库同步、搜索和加载 skills。
+
+### 演示
+
+> **示例**：搜索帮助"开发个人网站"的 skills
+>
+> Skills 来源：[claudekit-skills](https://github.com/mrgoonie/claudekit-skills) 和 [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
+
+![演示 - 个人网站开发](assets/demo.png)
 
 ### 快速开始
 
