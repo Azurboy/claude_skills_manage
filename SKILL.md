@@ -1,150 +1,164 @@
 ---
 name: skills-manager
-description: 智能 Skills 管理器 - 当用户需要查找、加载或管理 Claude Code skills 时使用此 skill。适用于：搜索特定领域的 skill、从仓库同步 skills、查看使用统计等场景。
+description: Intelligent Skills Manager - Use this skill when users need to find, search, load, or manage Claude Code skills. Triggers on requests like "find a skill about XXX", "search for MCP/React skills", "sync skills", or "show skill statistics".
 ---
 
 # Skills Manager
 
-你是一个智能 Skills 管理助手。当用户需要查找、加载或管理 skills 时，使用此 skill 来帮助他们。
+You are an intelligent Skills management assistant. When users need to find, load, or manage skills, use this skill to help them.
 
-## 何时使用此 Skill
+## When to Activate This Skill
 
-当用户表达以下意图时，自动激活此 skill：
-- "帮我找一个关于 XXX 的 skill"
-- "有没有 MCP/React/Docker 相关的 skill"
-- "加载 skill"
-- "同步 skills"
-- "查看 skill 统计"
+Automatically activate when users express these intents:
+- "Find me a skill about XXX"
+- "Is there a skill for MCP/React/Docker"
+- "Search for skills related to..."
+- "Load skill"
+- "Sync skills"
+- "Show skill statistics"
 
-## 核心能力
+## Prerequisites
 
-### 1. 同步 Skills 仓库
+Before using commands, ensure the CLI is built. If commands fail, run:
 
-当用户需要同步 skills 时，运行：
+```bash
+cd {{SKILL_PATH}} && npm install && npm run build
+```
+
+## Core Capabilities
+
+### 1. Sync Skills Repository
+
+When users need to sync skills:
 
 ```bash
 node {{SKILL_PATH}}/dist/cli.js sync
 ```
 
-如果用户需要配置新的仓库：
+To configure a new repository:
 
 ```bash
 node {{SKILL_PATH}}/dist/cli.js config <repo-url>
 ```
 
-推荐的 skills 仓库：
-- `https://github.com/ComposioHQ/awesome-claude-skills` - 33+ 高质量 skills
+Recommended skills repositories:
+- `https://github.com/ComposioHQ/awesome-claude-skills` - High-quality community skills
 
-### 2. 搜索 Skills（三层匹配）
+### 2. Search Skills (Three-Tier Matching)
 
-当用户描述需求时，运行搜索命令：
+When users describe their needs, run the search command:
 
 ```bash
-node {{SKILL_PATH}}/dist/cli.js load "<用户的需求描述>"
+node {{SKILL_PATH}}/dist/cli.js load "<user's requirement description>"
 ```
 
-**重要**：这个命令会返回预筛选的候选 skills。你需要：
+**Important**: This command returns pre-filtered candidate skills. You need to:
 
-1. 分析返回的候选列表
-2. 根据用户需求选出最相关的 1-5 个
-3. 向用户展示推荐，格式如下：
+1. Analyze the returned candidate list
+2. Select the 1-5 most relevant skills based on user needs
+3. Present recommendations to the user in this format:
 
 ```
-**为你找到以下相关 Skills：**
+**Found these relevant Skills for you:**
 
-1. **skill-name** (`skill-id`) - 相关度: 9/10
-   描述：xxx
-   推荐理由：xxx
+1. **skill-name** (`skill-id`) - Relevance: 9/10
+   Description: xxx
+   Why recommended: xxx
 
 2. ...
 
-是否加载这些 skills？(输入数字选择，或 "all" 全部加载)
+Would you like to load these skills? (Enter numbers to select, or "all" to load all)
 ```
 
-### 3. 加载 Skills
+### 3. Load Skills
 
-用户确认后，加载选中的 skills：
+After user confirmation, load the selected skills:
 
 ```bash
 node {{SKILL_PATH}}/dist/cli.js inject <skill-id-1> <skill-id-2> ...
 ```
 
-加载后，skill 内容会显示出来。**立即使用这些内容来帮助用户完成任务**。
+After loading, skill content will be displayed. **Immediately use this content to help the user complete their task**.
 
-### 4. 列出所有 Skills
+### 4. List All Skills
 
 ```bash
 node {{SKILL_PATH}}/dist/cli.js list
 ```
 
-### 5. 查看单个 Skill
+### 5. View Single Skill
 
 ```bash
 node {{SKILL_PATH}}/dist/cli.js show <skill-id>
 ```
 
-### 6. 使用反馈
+### 6. Usage Feedback
 
-任务完成后，询问用户 skill 是否有帮助，然后记录反馈：
+After task completion, ask if the skill was helpful, then record feedback:
 
 ```bash
-# 有用
-node {{SKILL_PATH}}/dist/cli.js feedback <skill-id> useful "场景描述"
+# Useful
+node {{SKILL_PATH}}/dist/cli.js feedback <skill-id> useful "scenario description"
 
-# 无用
+# Not useful
 node {{SKILL_PATH}}/dist/cli.js feedback <skill-id> notuseful
 ```
 
-### 7. 查看统计
+### 7. View Statistics
 
 ```bash
 node {{SKILL_PATH}}/dist/cli.js stats
 ```
 
-## 工作流程示例
+## Workflow Examples
 
-### 示例 1：用户需要 MCP 开发帮助
-
-```
-用户: "我想创建一个 MCP Server 来连接外部 API"
-
-你的操作:
-1. 运行: node {{SKILL_PATH}}/dist/cli.js load "创建 MCP Server 连接外部 API"
-2. 分析返回的候选 skills
-3. 向用户推荐最相关的 skills（如 mcp-builder）
-4. 用户确认后，运行: node {{SKILL_PATH}}/dist/cli.js inject mcp-builder
-5. 使用加载的 skill 内容帮助用户完成任务
-6. 任务完成后，询问是否有帮助并记录反馈
-```
-
-### 示例 2：用户需要写研究报告
+### Example 1: User Needs MCP Development Help
 
 ```
-用户: "帮我写一份市场研究报告"
+User: "I want to create an MCP Server to connect external APIs"
 
-你的操作:
-1. 运行: node {{SKILL_PATH}}/dist/cli.js load "写研究报告 research report"
-2. 推荐 content-research-writer 等相关 skills
-3. 加载并使用 skill 内容帮助用户
+Your actions:
+1. Run: node {{SKILL_PATH}}/dist/cli.js load "create MCP Server connect external API"
+2. Analyze returned candidate skills
+3. Recommend most relevant skills to user (e.g., mcp-builder)
+4. After user confirms, run: node {{SKILL_PATH}}/dist/cli.js inject mcp-builder
+5. Use loaded skill content to help user complete the task
+6. After task completion, ask if helpful and record feedback
 ```
 
-## 首次使用设置
+### Example 2: User Needs to Write Research Report
 
-如果用户是首次使用，需要先设置：
+```
+User: "Help me write a market research report"
 
-1. 配置 skills 仓库：
+Your actions:
+1. Run: node {{SKILL_PATH}}/dist/cli.js load "write research report"
+2. Recommend relevant skills like content-research-writer
+3. Load and use skill content to help user
+```
+
+## First-Time Setup
+
+If user is using for the first time, setup is needed:
+
+1. Build the CLI:
+```bash
+cd {{SKILL_PATH}} && npm install && npm run build
+```
+
+2. Configure skills repository:
 ```bash
 node {{SKILL_PATH}}/dist/cli.js config https://github.com/ComposioHQ/awesome-claude-skills
 ```
 
-2. 同步 skills：
+3. Sync skills:
 ```bash
 node {{SKILL_PATH}}/dist/cli.js sync
 ```
 
-## 注意事项
+## Notes
 
-- `{{SKILL_PATH}}` 会被自动替换为此 skill 的安装路径
-- 如果 CLI 命令失败，检查是否已运行 `npm install && npm run build`
-- 搜索支持中英文混合查询
-- 反馈数据存储在 `~/.claude-skills-cache/usage.json`
+- `{{SKILL_PATH}}` will be automatically replaced with this skill's installation path
+- Search supports mixed Chinese and English queries
+- Feedback data is stored in `~/.claude-skills-cache/usage.json`
+- Skills index is stored in `~/.claude-skills-cache/index.json`
