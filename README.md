@@ -1,6 +1,58 @@
 # Claude Skills Manager
 
-智能 Skills 管理系统，为 Claude Code 提供 skills 的同步、搜索和加载功能。
+智能 Skills 管理系统，作为 **Claude Code Custom Skill** 运行，帮助你从远程仓库同步、搜索和加载 skills。
+
+## 安装方式
+
+### 方式 A：作为 Claude Code Skill 安装（推荐）
+
+1. 克隆到 Claude Code skills 目录：
+
+```bash
+# macOS/Linux
+git clone https://github.com/Azurboy/claude_skills_control.git ~/.claude/skills/skills-manager
+
+# 或者克隆到项目目录
+git clone https://github.com/Azurboy/claude_skills_control.git .claude/skills/skills-manager
+```
+
+2. 安装依赖并构建：
+
+```bash
+cd ~/.claude/skills/skills-manager  # 或你的安装路径
+npm install
+npm run build
+```
+
+3. 首次配置 skills 仓库：
+
+```bash
+node dist/cli.js config https://github.com/ComposioHQ/awesome-claude-skills
+node dist/cli.js sync
+```
+
+4. 在 Claude Code 中使用：
+
+```
+你: "帮我找一个关于 MCP Server 开发的 skill"
+
+Claude 会自动识别并使用 skills-manager skill 来搜索和加载相关内容。
+```
+
+### 方式 B：作为独立 CLI 工具使用
+
+```bash
+git clone https://github.com/Azurboy/claude_skills_control.git
+cd claude_skills_control
+npm install
+npm run build
+
+# 使用
+node dist/cli.js sync
+node dist/cli.js load "创建 MCP Server"
+```
+
+---
 
 ## 为什么需要 Skills Manager？
 
